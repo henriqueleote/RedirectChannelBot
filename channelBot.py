@@ -1,6 +1,4 @@
 from telethon import TelegramClient, events
-import os
-import psutil
 import re
 
 # Austrian number account
@@ -9,7 +7,7 @@ api_hash = 'aed5482cd0ee156892ac0eab0f2bf3f4'
 channel_id = -1001921638321
 client = TelegramClient('my-client', api_id, api_hash)
 chat_list = [-1001314249243, -1001458489616, -1001174207332, -1001395637146, -1001007590845, -1001103963350, -1001493765825, -1001314084172, -1001537106037]
-discount_val = 65
+discount_val = 60
 
 
 def calcDiscount(prices):
@@ -30,15 +28,17 @@ def getPercentage(text):
     #pattern = r"(\d{1,2}[.,]?\d{0,2})\s*€"  # Regex pattern to match prices after the Euro symbol
     pattern = r'(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d+)?)\s?€'
     prices = re.findall(pattern, text)
-    formatted_prices = [price.replace(',', '') for price in prices]
-    return calcDiscount(formatted_prices)
-
+    formatted_prices = [price.replace(',', '.') for price in prices]
+    print(formatted_prices)
+    if len(formatted_prices) == 2:
+        return calcDiscount(formatted_prices)
+    return False
 @client.on(events.NewMessage(chats=chat_list))
 async def my_event_handler(event):
     await event.message.mark_read()
     percentage = getPercentage(event.message.message)
-    if (percentage):
-        if(percentage) >= discount_val:
+    if percentage:
+        if percentage >= discount_val:
             await client.forward_messages(channel_id, event.message)
         else:
             print(f'{event.message.message} -> {percentage}% discount')
@@ -46,7 +46,6 @@ async def my_event_handler(event):
 async def send_start_message():
     channel = await client.get_entity(channel_id)
     print('running...')
-    print(psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2)
     await client.send_message(channel, f"Now redirecting channel products with discount over {discount_val}%!")
 
 client.start()
