@@ -33,6 +33,16 @@ def getPercentage(text):
         return calcDiscount(formatted_prices)
     return False
 
+# Command handler for /changeDiscount command to change the minimum discount value
+@client.on(events.NewMessage(pattern='/changeDiscount (\d+)'))
+async def run_method_handler(event):
+    global discount_val
+    channel = await client.get_entity(channel_id)
+    new_discount = event.pattern_match.group(1)
+    discount_val = int(new_discount)
+    await client.send_message(channel, f"Now redirecting channel products with discount over {discount_val}%!")
+    await event.message.mark_read()
+
 # Event handler for new messages in the specified chat_list
 @client.on(events.NewMessage(chats=chat_list))
 async def my_event_handler(event):
@@ -42,13 +52,13 @@ async def my_event_handler(event):
         if percentage >= discount_val:
             await client.forward_messages(channel_id, event.message)
         else:
-            print(f'{event.message.message} -> {percentage}% discount')
+            print(f'{event.message.message} -> {percentage}% discount {discount_val}')
 
 # Function to send a start message to the channel
 async def send_start_message():
-    channel = await client.get_entity(channel_id)
     print('running...')
-    await client.send_message(channel, f"Now redirecting channel products with discount over {discount_val}%!")
+    channel = await client.get_entity(channel_id)
+    #await client.send_message(channel, f"Now redirecting channel products with discount over {discount_val}%!")
 
 # Start the client, run the send_start_message function, and run the client until disconnected
 client.start()
