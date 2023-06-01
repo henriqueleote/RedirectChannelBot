@@ -13,7 +13,7 @@ This script forwards messages from Telegram channels to another channel if they 
 
 
 ```python
-git clone https://github.com/henriqueleote/ChannelRedirectBot.git
+git clone https://github.com/henriqueleote/RedirectChannelBot.git
 cd your-repo
 ```
 
@@ -39,7 +39,7 @@ pip install telethon
 1. Run the script:
 
 ```python
-py TalkPointChannelBot.py
+py ChannelRedirectBot.py
 ```
 2. The script will start monitoring the specified channels for new messages.
 
