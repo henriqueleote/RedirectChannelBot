@@ -58,7 +58,7 @@ async def my_event_handler(event):
 async def send_start_message():
     print('running...')
     channel = await client.get_entity(channel_id)
-    #await client.send_message(channel, f"Now redirecting channel products with discount over {discount_val}%!")
+    await client.send_message(channel, f"Now redirecting channel products with discount over {discount_val}%!")
 
 # Start the client, run the send_start_message function, and run the client until disconnected
 client.start()
