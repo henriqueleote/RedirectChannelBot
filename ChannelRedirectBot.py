@@ -23,11 +23,13 @@ def calcDiscount(prices):
     percentage_discount = format(val2 * 100, '.0f')
     return float(percentage_discount)
 
+# TODO doesnt work with 1.440.00
 # Function to extract prices from text and calculate the percentage discount
 def getPercentage(text):
     pattern = r'(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d+)?)\s?€'
+
     prices = re.findall(pattern, text)
-    formatted_prices = [price.replace(',', '.') for price in prices]
+    formatted_prices = [price.replace('.', '').replace(',', '.') for price in prices]
     print(formatted_prices)
     if len(formatted_prices) == 2:
         return calcDiscount(formatted_prices)
