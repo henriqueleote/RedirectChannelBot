@@ -25,7 +25,7 @@ def calcDiscount(prices):
 
 # Function to extract prices from text and calculate the percentage discount
 def getPercentage(text):
-    pattern = r'(\d{1,3}(?:[.,]\d{3})*(?:[.,]\d+)?)\s?€'
+    pattern = r'(\d{1,3}(?:[.,\s]\d{3})*(?:[.,]\d+)?)\s?€'
 
     prices = re.findall(pattern, text)
     formatted_prices = [price.replace('.', '').replace(',', '.') for price in prices]
