@@ -2,12 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.session
+config.py
 
 # C extensions
 *.so
-
-#Myfiles
-my-client.session
 
 # Distribution / packaging
 .Python
