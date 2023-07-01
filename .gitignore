@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.session
+my-client.session
+*.session-journal
 config.py
 
 # C extensions
