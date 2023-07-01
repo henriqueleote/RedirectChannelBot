@@ -11,16 +11,15 @@ This script forwards messages from Telegram channels to another channel if they 
 
 1. Clone the repository:
 
-
 ```python
 git clone https://github.com/henriqueleote/RedirectChannelBot.git
-cd your-repo
+cd RedirectChannelBot
 ```
 
 2. Install the required dependencies:
 
 ```python
-pip install telethon
+pip install -r requirements.txt
 
 ```
 
