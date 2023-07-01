@@ -4,7 +4,6 @@ This script forwards messages from Telegram channels to another channel if they 
 
 ## Requirements
 
-- Python 3.x
 - Telethon
 
 ## Installation
@@ -42,9 +41,7 @@ py ChannelRedirectBot.py
 ```
 2. The script will start monitoring the specified channels for new messages.
 
-3. When a new message arrives, it will check if it contains a discount percentage. If the percentage is equal to or greater than the `discount_val`, the message will be forwarded to the specified channel.
-
-4. If the discount percentage is below the `discount_val`, it will print a message indicating the discount percentage.
+3. When a new message arrives, it will check if it contains a discount percentage. If the percentage is equal to or greater than the `discount_val` or contains the words "free" or "gratis", the message will be forwarded to the specified channel.
 
 ## Customization
 
