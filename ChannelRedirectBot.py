@@ -1,12 +1,15 @@
 from telethon import TelegramClient, events
 import re
+import config
 
-# Austrian number account
-api_id = '24877751'
-api_hash = 'aed5482cd0ee156892ac0eab0f2bf3f4'
-channel_id = -1001921638321
+# API CONFIG
+api_id = config.api_id
+api_hash = config.api_hash
+channel_id = config.channel_id
 client = TelegramClient('my-client', api_id, api_hash)
-chat_list = [-1001323749375, -1001314249243, -1001458489616, -1001174207332, -1001395637146, -1001007590845, -1001103963350, -1001493765825, -1001537106037]
+chat_list = config.chat_list
+
+# Minimum discount to redirect
 discount_val = 60
 
 # Function to calculate the percentage discount based on prices
@@ -26,10 +29,8 @@ def calcDiscount(prices):
 # Function to extract prices from text and calculate the percentage discount
 def getPercentage(text):
     pattern = r"(\d{1,3}(?:[.,\s']?\d{3})*(?:[.,]\d+)?)\s?€"
-
     prices = re.findall(pattern, text)
     formatted_prices = [price.replace('.', '').replace(',', '.') for price in prices]
-    print(formatted_prices)
     if len(formatted_prices) == 2:
         return calcDiscount(formatted_prices)
     return False
@@ -52,8 +53,6 @@ async def my_event_handler(event):
     if percentage:
         if percentage >= discount_val:
             await client.forward_messages(channel_id, event.message)
-        else:
-            print(f'{event.message.message} -> {percentage}% discount {discount_val}')
 
 # Function to send a start message to the channel
 async def send_start_message():
