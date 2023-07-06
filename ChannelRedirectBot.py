@@ -29,44 +29,26 @@ def calcDiscount(prices):
 # Function to extract prices from text and calculate the percentage discount
 def getPercentage(text):
     pattern = r"(\d{1,3}(?:[.,\s']?\d{3})*(?:[.,]\d+)?)\s?€"
-    #if "gratis" in text or "grátis" in text or "free" in text:
-    #    return 90
+    if "gratis" in text or "grátis" in text or "free" in text:
+        return 90
     prices = re.findall(pattern, text)
-    print(prices)
     formatted_prices = [price.replace('.', '').replace(',', '.') for price in prices]
+    print(formatted_prices)
     if len(formatted_prices) == 2:
         return calcDiscount(formatted_prices)
     return False
 
-# Command handler for /changeDiscount command to change the minimum discount value
-@client.on(events.NewMessage(pattern='/changeDiscount (\d+)'))
-async def run_method_handler(event):
-    global discount_val
-    channel = await client.get_entity(channel_id)
-    new_discount = event.pattern_match.group(1)
-    discount_val = int(new_discount)
-    await client.send_message(channel, f"Now redirecting channel products with discount over {discount_val}%!")
-    await event.message.mark_read()
 
 # Event handler for new messages in the specified chat_list
-@client.on(events.NewMessage(chats=chat_list))
+@client.on(events.NewMessage)
 async def my_event_handler(event):
     await event.message.mark_read()
     percentage = getPercentage(event.message.message)
-    if percentage:
-        if percentage >= discount_val:
-            await client.forward_messages(channel_id, event.message)
-        else:
-            print(event.message)
-    #if getPercentage(str.lower(event.message.message)) and getPercentage(str.lower(event.message.message)) >= discount_val:
-        #await client.forward_messages(channel_id, event.message)
-
-# Function to send a start message to the channel
-async def send_start_message():
-    print('running...')
-    channel = await client.get_entity(channel_id)
+    if percentage and percentage >= discount_val:
+        await client.forward_messages(channel_id, event.message)
+    else:
+        print(percentage)
 
 # Start the client, run the send_start_message function, and run the client until disconnected
 client.start()
-client.loop.run_until_complete(send_start_message())
 client.run_until_disconnected()
