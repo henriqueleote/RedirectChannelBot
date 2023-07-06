@@ -32,6 +32,7 @@ def getPercentage(text):
     #if "gratis" in text or "grátis" in text or "free" in text:
     #    return 90
     prices = re.findall(pattern, text)
+    print(prices)
     formatted_prices = [price.replace('.', '').replace(',', '.') for price in prices]
     if len(formatted_prices) == 2:
         return calcDiscount(formatted_prices)
@@ -55,7 +56,7 @@ async def my_event_handler(event):
     if percentage:
         if percentage >= discount_val:
             await client.forward_messages(channel_id, event.message)
-        else
+        else:
             print(event.message)
     #if getPercentage(str.lower(event.message.message)) and getPercentage(str.lower(event.message.message)) >= discount_val:
         #await client.forward_messages(channel_id, event.message)
