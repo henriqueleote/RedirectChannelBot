@@ -29,8 +29,8 @@ def calcDiscount(prices):
 # Function to extract prices from text and calculate the percentage discount
 def getPercentage(text):
     pattern = r"(\d{1,3}(?:[.,\s']?\d{3})*(?:[.,]\d+)?)\s?€"
-    if "gratis" in text or "grátis" in text or "free" in text:
-        return 90
+    #if "gratis" in text or "grátis" in text or "free" in text:
+    #    return 90
     prices = re.findall(pattern, text)
     formatted_prices = [price.replace('.', '').replace(',', '.') for price in prices]
     if len(formatted_prices) == 2:
@@ -51,8 +51,12 @@ async def run_method_handler(event):
 @client.on(events.NewMessage(chats=chat_list))
 async def my_event_handler(event):
     await event.message.mark_read()
-    if getPercentage(str.lower(event.message.message)) and getPercentage(str.lower(event.message.message)) >= discount_val:
-        await client.forward_messages(channel_id, event.message)
+    percentage = getPercentage(event.message.message)
+    if percentage:
+        if percentage >= discount_val:
+            await client.forward_messages(channel_id, event.message)
+    #if getPercentage(str.lower(event.message.message)) and getPercentage(str.lower(event.message.message)) >= discount_val:
+        #await client.forward_messages(channel_id, event.message)
 
 # Function to send a start message to the channel
 async def send_start_message():
