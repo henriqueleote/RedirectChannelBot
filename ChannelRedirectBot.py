@@ -55,6 +55,8 @@ async def my_event_handler(event):
     if percentage:
         if percentage >= discount_val:
             await client.forward_messages(channel_id, event.message)
+        else
+            print(event.message)
     #if getPercentage(str.lower(event.message.message)) and getPercentage(str.lower(event.message.message)) >= discount_val:
         #await client.forward_messages(channel_id, event.message)
 
