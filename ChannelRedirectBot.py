@@ -31,6 +31,13 @@ def getPercentage(text):
     pattern = r"(\d{1,3}(?:[.,\s']?\d{3})*(?:[.,]\d+)?)\s?€"
     if "gratis" in text or "grátis" in text or "free" in text:
         return 90
+    if "percentage" in text:
+        percentage_pattern = r"(\d+(?:\.\d+)?)\s?%"
+        match = re.search(percentage_pattern, text)
+        if match:
+            percentage = float(match.group(1))
+            if len(percentage) == 1:
+                return percentage
     prices = re.findall(pattern, text)
     formatted_prices = [price.replace('.', '').replace(',', '.') for price in prices]
     print(formatted_prices)
