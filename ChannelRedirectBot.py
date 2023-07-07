@@ -10,7 +10,7 @@ client = TelegramClient('my-client', api_id, api_hash)
 chat_list = config.chat_list
 
 # Minimum discount to redirect
-discount_val = 60
+discount_val = 45
 
 # Function to calculate the percentage discount based on prices
 def calcDiscount(prices):
