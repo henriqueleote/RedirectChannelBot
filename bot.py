@@ -6,7 +6,7 @@ import config
 api_id = config.api_id
 api_hash = config.api_hash
 channel_id = config.channel_id
-chat_list = config.chat_list
+chat_list = [-1001323749375, -1001537106037 -1001314249243, -1001458489616, -1001174207332, -1001007590845, -1001103963350, -1001493765825]
 
 def calculate_discount_percentage(message):
     pattern = r"(\d{1,3}(?:[.,\s']?\d{3})*(?:,\d{2,})?)\s?€"
