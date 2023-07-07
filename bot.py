@@ -6,7 +6,6 @@ import config
 api_id = config.api_id
 api_hash = config.api_hash
 channel_id = config.channel_id
-chat_list = [-1001323749375, -1001537106037 -1001314249243, -1001458489616, -1001174207332, -1001007590845, -1001103963350, -1001493765825]
 
 def calculate_discount_percentage(message):
     pattern = r"(\d{1,3}(?:[.,\s']?\d{3})*(?:,\d{2,})?)\s?€"
@@ -23,15 +22,14 @@ def calculate_discount_percentage(message):
     return None
 
 with TelegramClient('session', api_id, api_hash) as client:
-    @client.on(events.NewMessage)
+    @client.on(events.NewMessage(incoming=True))
     async def handle_new_message(event):
         # Get information about the received message
         message = event.message
-        if message.chat_id in chat_list:
-            await client.send_read_acknowledge(message.chat_id, message)
-            discount_percentage = calculate_discount_percentage(message.message)
-            if discount_percentage is not None and discount_percentage >= 50:
-                await client.forward_messages(channel_id, message)
-            print(f"The discount percentage is: {discount_percentage}%")
+        await client.send_read_acknowledge(message.chat_id, message)
+        discount_percentage = calculate_discount_percentage(message.message)
+        if discount_percentage is not None and discount_percentage >= 50:
+            await client.forward_messages(channel_id, message)
+        print(f"The discount percentage is: {discount_percentage}%")
 
     client.run_until_disconnected()
