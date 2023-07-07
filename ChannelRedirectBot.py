@@ -31,13 +31,13 @@ def getPercentage(text):
     pattern = r"(\d{1,3}(?:[.,\s']?\d{3})*(?:[.,]\d+)?)\s?€"
     if "gratis" in text or "grátis" in text or "free" in text:
         return 90
-    if "percentage" in text:
-        percentage_pattern = r"(\d+(?:\.\d+)?)\s?%"
-        match = re.search(percentage_pattern, text)
-        if match:
-            percentage = float(match.group(1))
-            if len(percentage) == 1:
-                return percentage
+    #if "percentage" in text:
+        #percentage_pattern = r"(\d+(?:\.\d+)?)\s?%"
+        #match = re.search(percentage_pattern, text)
+        #if match:
+            #percentage = float(match.group(1))
+            #if len(percentage) == 1:
+                #return percentage
     prices = re.findall(pattern, text)
     formatted_prices = [price.replace('.', '').replace(',', '.') for price in prices]
     print(formatted_prices)
@@ -49,7 +49,7 @@ def getPercentage(text):
 # Event handler for new messages in the specified chat_list
 @client.on(events.NewMessage)
 async def my_event_handler(event):
-    await event.message.mark_read()
+    #await event.message.mark_read()
     percentage = getPercentage(event.message.message)
     if percentage and percentage >= discount_val:
         await client.forward_messages(channel_id, event.message)
