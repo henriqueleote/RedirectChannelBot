@@ -9,7 +9,7 @@ channel_id = config.channel_id
 
 def calculate_discount_percentage(message):
     pattern = r"(\d{1,3}(?:[.,\s']?\d{3})*(?:,\d{2,})?)\s?€"
-    if "gratis" in message or "grátis" in message or "free" in message:
+    if "gratis" in message or "free" in message:
         return 90
     prices = re.findall(pattern, message)
     formatted_prices = [float(price.replace(',', '.')) for price in prices]
@@ -27,7 +27,7 @@ with TelegramClient('session', api_id, api_hash) as client:
         # Get information about the received message
         message = event.message
         await client.send_read_acknowledge(message.chat_id, message)
-        discount_percentage = calculate_discount_percentage(message.message)
+        discount_percentage = calculate_discount_percentage(message.message.lower())
         if discount_percentage is not None and discount_percentage >= 50:
             await client.forward_messages(channel_id, message)
         print(f"The discount percentage is: {discount_percentage}%")

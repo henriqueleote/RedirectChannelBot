@@ -1,1 +1,1 @@
-py ChannelRedirectBot.py
+py bot.py
