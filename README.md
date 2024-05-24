@@ -5,6 +5,7 @@ This script forwards messages from Telegram channels to another channel if they 
 ## Requirements
 
 - Telethon
+- psutil
 
 ## Installation
 
@@ -37,7 +38,7 @@ pip install -r requirements.txt
 1. Run the script:
 
 ```python
-py ChannelRedirectBot.py
+py bot.py
 ```
 2. The script will start monitoring the specified channels for new messages.
 
