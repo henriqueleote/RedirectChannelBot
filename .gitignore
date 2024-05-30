@@ -5,7 +5,7 @@ __pycache__/
 *.session
 my-client.session
 *.session-journal
-config.py
+redirect_config.py
 
 # C extensions
 *.so

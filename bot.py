@@ -1,21 +1,22 @@
 from telethon.sync import TelegramClient, events
 import re
-import config
+import redirect_config
 import os, psutil
 
 # API CONFIG
-api_id = config.api_id
-api_hash = config.api_hash
-channel_id = config.channel_id
+api_id = redirect_config.api_id
+api_hash = redirect_config.api_hash
+channel_id = redirect_config.channel_id
 
 print(f"Memory used: {psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2}MB")
+
 
 
 def calculate_discount_percentage(message):
     if "gratis" in message or "free" in message:
         return 100
 
-    for word in ["damen", "herren", "kinder"]:
+    for word in ["herren", "kinder", "man", "men", "baby"]:
         if word in message.lower():
             print('skipped one')
             return None
@@ -39,16 +40,16 @@ def calculate_discount_percentage(message):
         min_price = min(formatted_prices)
         discount_percentage = ((max_price - min_price) / max_price) * 100
         return discount_percentage
+    
 
 
 with TelegramClient('session', api_id, api_hash) as client:
     @client.on(events.NewMessage(incoming=True))
     async def handle_new_message(event):
-        # Get information about the received message
         message = event.message
         await client.send_read_acknowledge(message.chat_id, message)
         discount_percentage = calculate_discount_percentage(message.message)
-        if discount_percentage is not None and discount_percentage >= config.discount_val:
+        if discount_percentage is not None and discount_percentage >= redirect_config.discount_val:
             await client.forward_messages(channel_id, message)
         print(f"The discount percentage is: {discount_percentage}%")
 
