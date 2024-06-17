@@ -1,3 +1,5 @@
+import time
+
 from telethon.sync import TelegramClient, events
 import re
 import redirect_config
@@ -10,6 +12,8 @@ channel_id = redirect_config.channel_id
 
 print(f"Memory used: {psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2}MB")
 
+lastWortenProductStatus = time.time()
+lastTalkProductStatus = time.time()
 
 
 def calculate_discount_percentage(message):
@@ -40,20 +44,39 @@ def calculate_discount_percentage(message):
         min_price = min(formatted_prices)
         discount_percentage = ((max_price - min_price) / max_price) * 100
         return discount_percentage
-    
 
 
 with TelegramClient('session', api_id, api_hash) as client:
     @client.on(events.NewMessage(incoming=True))
     async def handle_new_message(event):
+
+        global lastWortenProductStatus, lastTalkProductStatus
+
         message = event.message
         await client.send_read_acknowledge(message.chat_id, message)
+
+        # bot from status
+        if message.chat_id == redirect_config.bot_status_id:
+            if 'worten' in message.message:
+                lastWortenProductStatus = time.time()
+            elif 'talk' in message.message:
+                lastTalkProductStatus = time.time()
+
+        # check if worten bot is down for 10 minutes
+        if time.time() - lastWortenProductStatus > 600:
+            lastWortenProductStatus = time.time()
+            await client.send_message(channel_id, f'\u274c Worten bot is down. \u274c')
+
+        # check if talkpoint bot is down for 10 minutes
+        if time.time() - lastTalkProductStatus > 600:
+            lastTalkProductStatus = time.time()
+            await client.send_message(channel_id, '\u274c Talkpoint bot is down. \u274c')
+
         if message.chat_id in redirect_config.chat_list:
             discount_percentage = calculate_discount_percentage(message.message)
             if discount_percentage is not None and discount_percentage >= redirect_config.discount_val:
                 await client.forward_messages(channel_id, message)
-            print(f"The discount percentage is: {discount_percentage}%")
+            print(f"The discount percentage is: {discount_percentage:.0%}%")
 
 
     client.run_until_disconnected()
-
