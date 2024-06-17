@@ -76,7 +76,7 @@ with TelegramClient('session', api_id, api_hash) as client:
             discount_percentage = calculate_discount_percentage(message.message)
             if discount_percentage is not None and discount_percentage >= redirect_config.discount_val:
                 await client.forward_messages(channel_id, message)
-            print(f"The discount percentage is: {discount_percentage:.0%}%")
+            print(f"The discount percentage is: {discount_percentage}%")
 
 
     client.run_until_disconnected()
