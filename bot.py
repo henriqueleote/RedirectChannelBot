@@ -17,12 +17,14 @@ lastTalkProductStatus = time.time()
 wortenBotStatus = True
 talkBotStatus = True
 
+bannedList = ["herren", "kinder", "man", "men", "baby"]
+
 
 def calculate_discount_percentage(message):
     if "gratis" in message or "free" in message:
         return 100
 
-    for word in ["herren", "kinder", "man", "men", "baby"]:
+    for word in bannedList:
         if word in message.lower():
             print('skipped one')
             return None
