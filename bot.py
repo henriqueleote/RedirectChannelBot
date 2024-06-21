@@ -14,6 +14,8 @@ print(f"Memory used: {psutil.Process(os.getpid()).memory_info().rss / 1024 ** 2}
 
 lastWortenProductStatus = time.time()
 lastTalkProductStatus = time.time()
+wortenBotStatus = True
+talkBotStatus = True
 
 
 def calculate_discount_percentage(message):
@@ -50,25 +52,35 @@ with TelegramClient('session', api_id, api_hash) as client:
     @client.on(events.NewMessage(incoming=True))
     async def handle_new_message(event):
 
-        global lastWortenProductStatus, lastTalkProductStatus
+        global lastWortenProductStatus, lastTalkProductStatus, wortenBotStatus, talkBotStatus
 
         message = event.message
         await client.send_read_acknowledge(message.chat_id, message)
 
         # bot from status
         if message.chat_id == redirect_config.bot_status_id:
-            if 'worten' in message.message:
+            if 'Last worten product' in message.message:
                 lastWortenProductStatus = time.time()
-            elif 'talk' in message.message:
+                wortenBotStatus = True
+            elif 'Last talk product' in message.message:
                 lastTalkProductStatus = time.time()
+                talkBotStatus = True
 
         # check if worten bot is down for 10 minutes
-        if time.time() - lastWortenProductStatus > 600:
+        if time.time() - lastWortenProductStatus > 300 and wortenBotStatus is True:
             lastWortenProductStatus = time.time()
+            wortenBotStatus = False
             await client.send_message(channel_id, f'\u274c Worten bot is down. \u274c')
+        elif wortenBotStatus is False and time.time() - lastWortenProductStatus > 1800:
+            lastWortenProductStatus = time.time()
+            await client.send_message(channel_id, '\u274c Worten bot is down. \u274c')
 
         # check if talkpoint bot is down for 10 minutes
-        if time.time() - lastTalkProductStatus > 600:
+        if time.time() - lastTalkProductStatus > 600 and talkBotStatus is True:
+            lastTalkProductStatus = time.time()
+            talkBotStatus = False
+            await client.send_message(channel_id, '\u274c Talkpoint bot is down. \u274c')
+        elif talkBotStatus is False and time.time() - lastTalkProductStatus > 1800:
             lastTalkProductStatus = time.time()
             await client.send_message(channel_id, '\u274c Talkpoint bot is down. \u274c')
 
