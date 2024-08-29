@@ -17,7 +17,7 @@ lastTalkProductStatus = time.time()
 wortenBotStatus = True
 talkBotStatus = True
 
-bannedList = ["herren", "kinder", "man", "men", "baby"]
+bannedList = ["herren", "kinder", "man", "men", "baby", "toner"]
 
 
 def calculate_discount_percentage(message):
@@ -69,20 +69,20 @@ with TelegramClient('session', api_id, api_hash) as client:
                 talkBotStatus = True
 
         # check if worten bot is down for 10 minutes
-        if time.time() - lastWortenProductStatus > 300 and wortenBotStatus is True:
+        if time.time() - lastWortenProductStatus > 600 and wortenBotStatus is True:
             lastWortenProductStatus = time.time()
             wortenBotStatus = False
             await client.send_message(channel_id, f'\u274c Worten bot is down. \u274c')
-        elif wortenBotStatus is False and time.time() - lastWortenProductStatus > 1800:
+        elif wortenBotStatus is False and time.time() - lastWortenProductStatus > 3600:
             lastWortenProductStatus = time.time()
             await client.send_message(channel_id, '\u274c Worten bot is down. \u274c')
 
-        # check if talkpoint bot is down for 10 minutes
-        if time.time() - lastTalkProductStatus > 600 and talkBotStatus is True:
+        # check if talkpoint bot is down for 5 minutes
+        if time.time() - lastTalkProductStatus > 300 and talkBotStatus is True:
             lastTalkProductStatus = time.time()
             talkBotStatus = False
             await client.send_message(channel_id, '\u274c Talkpoint bot is down. \u274c')
-        elif talkBotStatus is False and time.time() - lastTalkProductStatus > 1800:
+        elif talkBotStatus is False and time.time() - lastTalkProductStatus > 3600:
             lastTalkProductStatus = time.time()
             await client.send_message(channel_id, '\u274c Talkpoint bot is down. \u274c')
 
